@@ -1,1 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
 
+    <h2>Style Settings</h2>
+    <label for="font">Font (e.g., Arial, sans-serif):</label>
+    <input type="text" id="font"><br>
+    <label for="fontSize">Font Size (e.g., 16):</label>
+    <input type="number" id="fontSize"><br>
+    <label for="image">Image URL (e.g., https://example.com/logo.png):</label>
+    <input type="text" id="image"><br>
+
+    <h2>Sentence Template</h2>
+    <textarea id="template" rows="4" cols="50">
+My favorite clothing brand is [brand] and it is owned by [owner] and their average garment is produced for $[avg_cost] by [labor_conditions] workers in [country].
+    </textarea><br>
+
+    <h2>Brand Data (JSON)</h2>
+    <textarea id="data" rows="10" cols="50"></textarea><br>
+    <button onclick="saveData()">Save Data</button>
+
+    <script>
+        async function fetchData() {
+            const response = await fetch('data.json');
+            return await response.json();
+        }
+
+        async function loadData() {
+            const data = await fetchData();
+            document.getElementById('font').value = data.font || '';
+            document.getElementById('fontSize').value = data.fontSize || '';
+            document.getElementById('image').value = data.image || '';
+            document.getElementById('template').value = data.template || '';
+            document.getElementById('data').value = JSON.stringify(data.brands, null, 2);
+        }
+
+        function saveData() {
+            const font = document.getElementById('font').value;
+            const fontSize = document.getElementById('fontSize').value;
+            const image = document.getElementById('image').value;
+            const template = document.getElementById('template').value;
+            const brandsText = document.getElementById('data').value;
+            try {
+                const brands = JSON.parse(brandsText);
+                const data = {
+                    font: font,
+                    fontSize: fontSize,
+                    image: image,
+                    template: template,
+                    brands: brands
+                };
+                // Note: In a real scenario, you'd save this to the server. For now, we'll just alert.
+                alert('Data prepared. To save, copy the JSON below and paste it into data.json on GitHub:\n\n' + JSON.stringify(data, null, 2));
+            } catch (e) {
+                alert('Invalid JSON format in brand data.');
+            }
+        }
+
+        // Load data when the page opens
+        loadData();
+    </script>
+</body>
+</html>

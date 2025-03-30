@@ -1,1 +1,20 @@
-
+{
+    "font": "Arial, sans-serif",
+    "fontSize": 16,
+    "image": "",
+    "template": "My favorite clothing brand is [brand] and it is owned by [owner] and their average garment is produced for $[avg_cost] by [labor_conditions] workers in [country].",
+    "brands": {
+        "Nike": {
+            "owner": "Nike, Inc.",
+            "country": "China",
+            "avg_cost": 5.00,
+            "labor_conditions": "underpaid"
+        },
+        "H&M": {
+            "owner": "Hennes & Mauritz AB",
+            "country": "Bangladesh",
+            "avg_cost": 3.00,
+            "labor_conditions": "underpaid"
+        }
+    }
+}

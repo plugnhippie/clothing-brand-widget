@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clothing Brand Info</title>
+    <style>
+        #result {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Clothing Brand Information</h1>
+    <input type="text" id="brandInput" placeholder="Type 'my favorite clothing brand is [brand name]'">
+    <button onclick="generateSentence()">Generate Sentence</button>
+    <p id="result"></p>
+    <img id="logo" src="" alt="Logo" style="display:none;">
 
+    <script>
+        async function fetchData() {
+            const response = await fetch('data.json');
+            return await response.json();
+        }
+
+        async function generateSentence() {
+            const data = await fetchData();
+            const input = document.getElementById('brandInput').value;
+            const prefix = "my favorite clothing brand is ";
+            if (input.startsWith(prefix)) {
+                const brandName = input.substring(prefix.length).trim();
+                const brand = data.brands[brandName];
+                if (brand) {
+                    const template = data.template;
+                    const sentence = template
+                        .replace('[brand]', brandName)
+                        .replace('[owner]', brand.owner)
+                        .replace('[avg_cost]', brand.avg_cost.toFixed(2))
+                        .replace('[labor_conditions]', brand.labor_conditions)
+                        .replace('[country]', brand.country);
+                    document.getElementById('result').innerText = sentence;
+
+                    // Apply styles
+                    document.getElementById('result').style.fontFamily = data.font;
+                    document.getElementById('result').style.fontSize = data.fontSize + 'px';
+                    if (data.image) {
+                        document.getElementById('logo').src = data.image;
+                        document.getElementById('logo').style.display = 'block';
+                    }
+                } else {
+                    document.getElementById('result').innerText = "Information not available for this brand.";
+                }
+            } else {
+                document.getElementById('result').innerText = "Please start with 'my favorite clothing brand is ' followed by the brand name.";
+            }
+        }
+    </script>
+</body>
+</html>
