@@ -23,11 +23,10 @@
             max-width: 600px;
             text-align: center;
         }
-        h1 {
-            font-size: 24px;
-            color: #111;
+        .feature-image {
+            max-width: 200px;
+            height: auto;
             margin-bottom: 20px;
-            text-transform: uppercase;
         }
         .input-group {
             display: flex;
@@ -66,22 +65,23 @@
             color: #333;
             margin-top: 20px;
         }
-        #logo {
+        #brandImage {
             max-width: 100px;
+            height: auto;
             margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Favorite Clothing Brand</h1>
+        <img id="featureImage" class="feature-image" src="" alt="Feature Image" style="display:none;">
         <div class="input-group">
             <span class="prefix">MY FAVORITE CLOTHING BRAND IS...</span>
             <input type="text" id="brandInput" placeholder="Enter brand name">
         </div>
-        <button onclick="generateSentence()">Generate</button>
+        <button onclick="generateSentence()">LEARN MORE</button>
         <p id="result"></p>
-        <img id="logo" src="" alt="Logo" style="display:none;">
+        <img id="brandImage" src="" alt="Brand Image" style="display:none;">
     </div>
 
     <script>
@@ -92,13 +92,19 @@
 
         async function generateSentence() {
             const data = await fetchData();
-            const brandName = document.getElementById('brandInput').value.trim();
-            if (brandName) {
-                const brand = data.brands[brandName];
-                if (brand) {
+            const brandInput = document.getElementById('brandInput').value.trim().toLowerCase().replace(/[^\w\s]/g, '');
+            if (brandInput) {
+                const brands = Object.keys(data.brands).reduce((acc, key) => {
+                    acc[key.toLowerCase().replace(/[^\w\s]/g, '')] = data.brands[key];
+                    return acc;
+                }, {});
+                const brandName = Object.keys(brands).find(key => key === brandInput);
+                if (brandName) {
+                    const brand = brands[brandName];
+                    const originalBrandName = Object.keys(data.brands).find(k => k.toLowerCase().replace(/[^\w\s]/g, '') === brandName);
                     const template = data.template;
                     const sentence = template
-                        .replace('[brand]', brandName)
+                        .replace('[brand]', originalBrandName)
                         .replace('[owner]', brand.owner)
                         .replace('[avg_cost]', brand.avg_cost.toFixed(2))
                         .replace('[labor_conditions]', brand.labor_conditions)
@@ -107,15 +113,19 @@
 
                     document.getElementById('result').style.fontFamily = data.font;
                     document.getElementById('result').style.fontSize = data.fontSize + 'px';
-                    if (data.image) {
-                        document.getElementById('logo').src = data.image;
-                        document.getElementById('logo').style.display = 'block';
-                    }
+                    document.getElementById('featureImage').src = data.featureImage || '';
+                    document.getElementById('featureImage').style.display = data.featureImage ? 'block' : 'none';
+
+                    const overrideImage = data.overrideLearnMoreImage || brand.image;
+                    document.getElementById('brandImage').src = overrideImage || '';
+                    document.getElementById('brandImage').style.display = overrideImage ? 'block' : 'none';
                 } else {
                     document.getElementById('result').innerText = "Information not available for this brand.";
+                    document.getElementById('brandImage').style.display = 'none';
                 }
             } else {
                 document.getElementById('result').innerText = "Please enter a brand name.";
+                document.getElementById('brandImage').style.display = 'none';
             }
         }
     </script>
