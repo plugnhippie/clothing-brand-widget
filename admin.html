@@ -48,8 +48,8 @@
     <input type="text" id="font" oninput="updatePreview()">
     <label for="fontSize">Font Size (e.g., 16):</label>
     <input type="number" id="fontSize" oninput="updatePreview()">
-    <label for="featureImage">Feature Photo URL (e.g., https://example.com/feature.png):</label>
-    <input type="text" id="featureImage" oninput="updateFeaturePreview()">
+    <label for="featureImage">Feature Photo:</label>
+    <input type="file" id="featureImage" accept="image/*" onchange="updateFeaturePreview()">
 
     <h2>Feature Photo Preview</h2>
     <div id="featurePreview"></div>
@@ -70,11 +70,11 @@ My favorite clothing brand is [brand] and it is owned by [owner] and their avera
     <h2>Brand Data (JSON)</h2>
     <textarea id="data" rows="10" cols="50"></textarea>
 
-    <h2>Learn More Image Override</h2>
-    <label for="overrideLearnMoreImage">Override Learn More Image URL:</label>
-    <input type="text" id="overrideLearnMoreImage" oninput="updateLearnMorePreview()">
-    <label for="uploadLearnMoreImage">Upload Learn More Image URL:</label>
-    <input type="text" id="uploadLearnMoreImage" oninput="updateLearnMorePreview()">
+    <h2>Learn More Image Settings</h2>
+    <label for="overrideLearnMoreImage">Override Learn More Image:</label>
+    <input type="file" id="overrideLearnMoreImage" accept="image/*" onchange="updateLearnMorePreview()">
+    <label for="uploadLearnMoreImage">Upload Learn More Image:</label>
+    <input type="file" id="uploadLearnMoreImage" accept="image/*" onchange="updateLearnMorePreview()">
     <button onclick="clearOverride()">Clear Override</button>
 
     <h2>Learn More Image Preview</h2>
@@ -83,6 +83,10 @@ My favorite clothing brand is [brand] and it is owned by [owner] and their avera
     <button onclick="saveData()">Save All Changes</button>
 
     <script>
+        let featureFileName = '';
+        let overrideFileName = '';
+        let uploadFileName = '';
+
         async function fetchData() {
             const response = await fetch('data.json');
             return await response.json();
@@ -92,11 +96,10 @@ My favorite clothing brand is [brand] and it is owned by [owner] and their avera
             const data = await fetchData();
             document.getElementById('font').value = data.font || '';
             document.getElementById('fontSize').value = data.fontSize || '';
-            document.getElementById('featureImage').value = data.featureImage || '';
+            featureFileName = data.featureImage || '';
             document.getElementById('template').value = data.template || '';
             document.getElementById('data').value = JSON.stringify(data.brands, null, 2);
-            document.getElementById('overrideLearnMoreImage').value = data.overrideLearnMoreImage || '';
-            document.getElementById('uploadLearnMoreImage').value = '';
+            overrideFileName = data.overrideLearnMoreImage || '';
             updatePreview();
             updateFeaturePreview();
             updateLearnMorePreview();
@@ -113,31 +116,61 @@ My favorite clothing brand is [brand] and it is owned by [owner] and their avera
         }
 
         function updateFeaturePreview() {
-            const featureImage = document.getElementById('featureImage').value;
+            const fileInput = document.getElementById('featureImage');
             const preview = document.getElementById('featurePreview');
             preview.innerHTML = '';
-            if (featureImage) {
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+                featureFileName = 'images/' + fileInput.files[0].name;
+            } else if (featureFileName) {
                 const img = document.createElement('img');
-                img.src = featureImage;
+                img.src = featureFileName;
                 preview.appendChild(img);
             }
         }
 
         function updateLearnMorePreview() {
-            const overrideImage = document.getElementById('overrideLearnMoreImage').value;
-            const uploadImage = document.getElementById('uploadLearnMoreImage').value;
+            const overrideInput = document.getElementById('overrideLearnMoreImage');
+            const uploadInput = document.getElementById('uploadLearnMoreImage');
             const preview = document.getElementById('learnMorePreview');
             preview.innerHTML = '';
-            const imageToShow = uploadImage || overrideImage;
-            if (imageToShow) {
+            if (uploadInput.files && uploadInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(uploadInput.files[0]);
+                uploadFileName = 'images/' + uploadInput.files[0].name;
+                overrideFileName = uploadFileName;
+            } else if (overrideInput.files && overrideInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(overrideInput.files[0]);
+                overrideFileName = 'images/' + overrideInput.files[0].name;
+            } else if (overrideFileName) {
                 const img = document.createElement('img');
-                img.src = imageToShow;
+                img.src = overrideFileName;
                 preview.appendChild(img);
             }
         }
 
         function clearOverride() {
             document.getElementById('overrideLearnMoreImage').value = '';
+            document.getElementById('uploadLearnMoreImage').value = '';
+            overrideFileName = '';
+            uploadFileName = '';
             updateLearnMorePreview();
         }
 
@@ -181,7 +214,7 @@ My favorite clothing brand is [brand] and it is owned by [owner] and their avera
                         country: values[2],
                         avg_cost: parseFloat(values[3]) || 0,
                         labor_conditions: values[4],
-                        image: values[5] || ''
+                        image: values[5] ? 'images/' + values[5] : ''
                     };
                 }
             }
@@ -191,21 +224,19 @@ My favorite clothing brand is [brand] and it is owned by [owner] and their avera
         function saveData() {
             const font = document.getElementById('font').value;
             const fontSize = document.getElementById('fontSize').value;
-            const featureImage = document.getElementById('featureImage').value;
             const template = document.getElementById('template').value;
             const brandsText = document.getElementById('data').value;
-            const overrideLearnMoreImage = document.getElementById('overrideLearnMoreImage').value || document.getElementById('uploadLearnMoreImage').value;
             try {
                 const brands = JSON.parse(brandsText);
                 const data = {
                     font: font,
                     fontSize: fontSize,
-                    featureImage: featureImage,
+                    featureImage: featureFileName,
                     template: template,
                     brands: brands,
-                    overrideLearnMoreImage: overrideLearnMoreImage
+                    overrideLearnMoreImage: overrideFileName
                 };
-                alert('Copy the JSON below and paste it into data.json on GitHub:\n\n' + JSON.stringify(data, null, 2));
+                alert('1. Copy the JSON below and paste it into data.json on GitHub.\n2. Upload the selected images to an "images" folder in your GitHub repository:\n- Feature: ' + (featureFileName || 'None') + '\n- Learn More: ' + (overrideFileName || 'None') + '\n\n' + JSON.stringify(data, null, 2));
             } catch (e) {
                 alert('Invalid JSON format in brand data: ' + e.message);
             }
