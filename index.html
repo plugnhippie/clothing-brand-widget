@@ -5,18 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clothing Brand Info</title>
     <style>
-        #result {
-            font-family: Arial, sans-serif;
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 24px;
+            color: #111;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .prefix {
+            font-size: 18px;
+            color: #333;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        #brandInput {
+            flex: 1;
+            padding: 10px;
             font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+        button {
+            background-color: #000;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #333;
+        }
+        #result {
+            font-size: 16px;
+            color: #333;
+            margin-top: 20px;
+        }
+        #logo {
+            max-width: 100px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>Clothing Brand Information</h1>
-    <input type="text" id="brandInput" placeholder="Type 'my favorite clothing brand is [brand name]'">
-    <button onclick="generateSentence()">Generate Sentence</button>
-    <p id="result"></p>
-    <img id="logo" src="" alt="Logo" style="display:none;">
+    <div class="container">
+        <h1>Favorite Clothing Brand</h1>
+        <div class="input-group">
+            <span class="prefix">MY FAVORITE CLOTHING BRAND IS...</span>
+            <input type="text" id="brandInput" placeholder="Enter brand name">
+        </div>
+        <button onclick="generateSentence()">Generate</button>
+        <p id="result"></p>
+        <img id="logo" src="" alt="Logo" style="display:none;">
+    </div>
 
     <script>
         async function fetchData() {
@@ -26,10 +92,8 @@
 
         async function generateSentence() {
             const data = await fetchData();
-            const input = document.getElementById('brandInput').value;
-            const prefix = "my favorite clothing brand is ";
-            if (input.startsWith(prefix)) {
-                const brandName = input.substring(prefix.length).trim();
+            const brandName = document.getElementById('brandInput').value.trim();
+            if (brandName) {
                 const brand = data.brands[brandName];
                 if (brand) {
                     const template = data.template;
@@ -41,7 +105,6 @@
                         .replace('[country]', brand.country);
                     document.getElementById('result').innerText = sentence;
 
-                    // Apply styles
                     document.getElementById('result').style.fontFamily = data.font;
                     document.getElementById('result').style.fontSize = data.fontSize + 'px';
                     if (data.image) {
@@ -52,7 +115,7 @@
                     document.getElementById('result').innerText = "Information not available for this brand.";
                 }
             } else {
-                document.getElementById('result').innerText = "Please start with 'my favorite clothing brand is ' followed by the brand name.";
+                document.getElementById('result').innerText = "Please enter a brand name.";
             }
         }
     </script>
