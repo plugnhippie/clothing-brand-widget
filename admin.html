@@ -85,6 +85,7 @@ My favorite clothing brand is [brand] and it is owned by [owner] and their avera
             const fontSize = document.getElementById('fontSize').value;
             const image = document.getElementById('image').value;
             const preview = document.getElementById('preview');
+            preview.innerHTML = ''; // Clear previous content
             preview.style.fontFamily = font || 'Arial, sans-serif';
             preview.style.fontSize = fontSize ? fontSize + 'px' : '16px';
             preview.innerText = "Preview text will appear here.";
@@ -102,30 +103,40 @@ My favorite clothing brand is [brand] and it is owned by [owner] and their avera
                 alert('Please enter a Google Sheets URL.');
                 return;
             }
-            const sheetId = sheetUrl.match(/\/d\/(.+?)\//)[1];
+            const sheetIdMatch = sheetUrl.match(/\/d\/(.+?)\//);
+            if (!sheetIdMatch) {
+                alert('Invalid Google Sheets URL.');
+                return;
+            }
+            const sheetId = sheetIdMatch[1];
             const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
             try {
                 const response = await fetch(csvUrl);
                 const csvText = await response.text();
                 const json = csvToJson(csvText);
-                document.getElementById('data').value = JSON.stringify(json, null, 2);
-                alert('Sheet data loaded into Brand Data section.');
+                const formattedJson = { brands: json };
+                document.getElementById('data').value = JSON.stringify(formattedJson.brands, null, 2);
+                alert('Sheet data loaded successfully.');
             } catch (e) {
-                alert('Error loading sheet. Make sure it’s shared publicly.');
+                alert('Error loading sheet. Ensure it’s shared publicly and formatted correctly.');
             }
         }
 
         function csvToJson(csv) {
-            const lines = csv.split('\n');
+            const lines = csv.split('\n').filter(line => line.trim() !== '');
             const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/"/g, ''));
+            const expectedHeaders = ['brand', 'owner', 'country', 'avg cost', 'labor conditions'];
+            if (!expectedHeaders.every((h, i) => headers[i] === h)) {
+                throw new Error('Header mismatch');
+            }
             const brands = {};
             for (let i = 1; i < lines.length; i++) {
-                const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
-                if (values[0]) {
+                const values = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.trim().replace(/^"|"$/g, ''));
+                if (values.length >= 5 && values[0]) {
                     brands[values[0]] = {
                         owner: values[1],
                         country: values[2],
-                        avg_cost: parseFloat(values[3]),
+                        avg_cost: parseFloat(values[3]) || 0,
                         labor_conditions: values[4]
                     };
                 }
@@ -150,7 +161,7 @@ My favorite clothing brand is [brand] and it is owned by [owner] and their avera
                 };
                 alert('Copy the JSON below and paste it into data.json on GitHub:\n\n' + JSON.stringify(data, null, 2));
             } catch (e) {
-                alert('Invalid JSON format in brand data.');
+                alert('Invalid JSON format in brand data: ' + e.message);
             }
         }
 
