@@ -4,20 +4,293 @@
     "featureImage": "",
     "template": "My favorite clothing brand is [brand] and it is owned by [owner] and their average garment is produced for $[avg_cost] by [labor_conditions] workers in [country].",
     "brands": {
-        "Nike": {
-            "owner": "Nike, Inc.",
-            "country": "China",
-            "avg_cost": 5.00,
-            "labor_conditions": "underpaid",
-            "image": "https://example.com/nike.png"
-        },
-        "H&M": {
-            "owner": "Hennes & Mauritz AB",
-            "country": "Bangladesh",
-            "avg_cost": 3.00,
-            "labor_conditions": "underpaid",
-            "image": "https://example.com/hm.png"
-        }
-    },
+  "Nike": {
+    "owner": "Nike, Inc.",
+    "country": "China",
+    "avg_cost": 5,
+    "labor_conditions": "underpaid",
+    "image": ""
+  },
+  "H&M": {
+    "owner": "Hennes & Mauritz AB",
+    "country": "Bangladesh",
+    "avg_cost": 3,
+    "labor_conditions": "",
+    "image": ""
+  },
+  "Louis Vuitton": {
+    "owner": "LVMH Moët Hennessy Louis Vuitton",
+    "country": "Italy, France",
+    "avg_cost": 15,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Dior": {
+    "owner": "LVMH Moët Hennessy Louis Vuitton",
+    "country": "Italy, France",
+    "avg_cost": 15,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Zara": {
+    "owner": "Inditex (Industria de Deseno Textil)",
+    "country": "Spain, Bangladesh",
+    "avg_cost": 3,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Pull & Bear": {
+    "owner": "Inditex (Industria de Deseno Textil)",
+    "country": "Spain, Bangladesh",
+    "avg_cost": 3,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Uniqlo": {
+    "owner": "Fast Retailing Co., Ltd.",
+    "country": "China, Vietnam",
+    "avg_cost": 4,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Adidas": {
+    "owner": "Adidas AG",
+    "country": "Germany, China",
+    "avg_cost": 5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Calvin Klein": {
+    "owner": "PVH Corp.",
+    "country": "Turkey, Vietnam",
+    "avg_cost": 4.5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Tommy Hilfiger": {
+    "owner": "PVH Corp.",
+    "country": "Turkey, Vietnam",
+    "avg_cost": 4.5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Gucci": {
+    "owner": "Kering",
+    "country": "Italy, France",
+    "avg_cost": 20,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Balenciaga": {
+    "owner": "Kering",
+    "country": "Italy, France",
+    "avg_cost": 20,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Gap": {
+    "owner": "Gap Inc.",
+    "country": "Vietnam, China",
+    "avg_cost": 4,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Old Navy": {
+    "owner": "Gap Inc.",
+    "country": "Vietnam, China",
+    "avg_cost": 4,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Ross Dress for Less": {
+    "owner": "Ross Stores, Inc.",
+    "country": "China, Indonesia",
+    "avg_cost": 3.5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "The North Face": {
+    "owner": "VF Corp.",
+    "country": "China",
+    "avg_cost": 5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Vans": {
+    "owner": "VF Corp.",
+    "country": "China",
+    "avg_cost": 5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Timberland": {
+    "owner": "VF Corp.",
+    "country": "China",
+    "avg_cost": 5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Sketchers": {
+    "owner": "Sketchers USA, Inc.",
+    "country": "China",
+    "avg_cost": 5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Coach": {
+    "owner": "Tapestry, Inc.",
+    "country": "China",
+    "avg_cost": 5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Kate Spade": {
+    "owner": "Tapestry, Inc.",
+    "country": "China",
+    "avg_cost": 5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Stuart Weitzman": {
+    "owner": "Tapestry, Inc.",
+    "country": "China",
+    "avg_cost": 5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Levi's": {
+    "owner": "Levi Strauss & Co.",
+    "country": "Bangladesh",
+    "avg_cost": 3,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Under Armor": {
+    "owner": "Under Armor, Inc.",
+    "country": "China",
+    "avg_cost": 5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Ralph Lauren": {
+    "owner": "Ralph Lauren Corporation",
+    "country": "China",
+    "avg_cost": 5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Burberry": {
+    "owner": "Burberry Group Plc",
+    "country": "Italy ",
+    "avg_cost": 10,
+    "labor_conditions": "Below Poverty",
+    "image": ""
+  },
+  "Prada": {
+    "owner": "Prada S.P.A.",
+    "country": "Italy",
+    "avg_cost": 20,
+    "labor_conditions": "Below Poverty",
+    "image": ""
+  },
+  "Crocs": {
+    "owner": "Crocs, Inc.",
+    "country": "China",
+    "avg_cost": 5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Michael Kors": {
+    "owner": "Capri Holdings Limited",
+    "country": "Italy",
+    "avg_cost": 10,
+    "labor_conditions": "Below Poverty",
+    "image": ""
+  },
+  "Versace": {
+    "owner": "Capri Holdings Limited",
+    "country": "Italy",
+    "avg_cost": 10,
+    "labor_conditions": "Below Poverty",
+    "image": ""
+  },
+  "Jimmy Choo": {
+    "owner": "Capri Holdings Limited",
+    "country": "Italy",
+    "avg_cost": 10,
+    "labor_conditions": "Below Poverty",
+    "image": ""
+  },
+  "Puma": {
+    "owner": "Puma SE",
+    "country": "China",
+    "avg_cost": 5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "New Balance": {
+    "owner": "New Balance ",
+    "country": "China",
+    "avg_cost": 5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Reebok": {
+    "owner": "Adidas AG",
+    "country": "Indonesia",
+    "avg_cost": 5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "UGG": {
+    "owner": "Sketchers USA, Inc.",
+    "country": "China",
+    "avg_cost": 5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Columbia Sportswear": {
+    "owner": "Columbia Sportswear Company",
+    "country": "Vietnam ",
+    "avg_cost": 5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Fendi": {
+    "owner": "LVMH Moët Hennessy Louis Vuitton",
+    "country": "Italy, France",
+    "avg_cost": 15,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Moncler": {
+    "owner": "Moncler",
+    "country": "Italy",
+    "avg_cost": 50,
+    "labor_conditions": "Below Poverty",
+    "image": ""
+  },
+  "Shein": {
+    "owner": "Roadget Business Pte. Ltd.",
+    "country": "China",
+    "avg_cost": 2.5,
+    "labor_conditions": "Underpaid",
+    "image": ""
+  },
+  "Chrome Hearts": {
+    "owner": "Chrome Hearts LLC",
+    "country": "USA",
+    "avg_cost": 20,
+    "labor_conditions": "Fair/ Below Poverty",
+    "image": ""
+  },
+  "Rick Owens": {
+    "owner": "Rick Owens",
+    "country": "Italy",
+    "avg_cost": 50,
+    "labor_conditions": "Below Poverty",
+    "image": ""
+  }
+},
     "overrideLearnMoreImage": ""
 }
