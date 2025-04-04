@@ -9,66 +9,88 @@
             font-family: 'Arial', sans-serif;
             background-color: #000000;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow: hidden; /* Prevents body scrolling */
         }
         .container {
             background-color: #6ac1b7;
-            padding: 40px;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+            width: 100%;
             max-width: 600px;
             text-align: center;
+            box-sizing: border-box;
         }
         .feature-image {
-            max-width: 200px;
+            max-width: 150px;
             height: auto;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         .input-group {
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         .prefix {
-            font-size: 18px;
+            font-size: clamp(14px, 4vw, 18px); /* Scales with viewport */
             color: #333;
-            margin-right: 10px;
+            margin-right: 5px;
             font-weight: bold;
+            white-space: nowrap;
         }
         #brandInput {
             flex: 1;
-            padding: 10px;
-            font-size: 16px;
+            padding: 8px;
+            font-size: clamp(12px, 3vw, 16px);
             border: 1px solid #ccc;
             border-radius: 5px;
             outline: none;
+            min-width: 0;
         }
         button {
             background-color: #000;
             color: #fff;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border: none;
             border-radius: 5px;
-            font-size: 16px;
+            font-size: clamp(12px, 3vw, 16px);
             cursor: pointer;
             transition: background-color 0.3s;
+            width: 100%;
+            max-width: 200px;
+            margin: 10px auto;
         }
         button:hover {
             background-color: #333;
         }
         #result {
-            font-size: 16px;
+            font-size: clamp(12px, 3vw, 16px);
             color: #333;
-            margin-top: 20px;
+            margin: 10px 0;
+            word-wrap: break-word;
         }
         #brandImage {
-            max-width: 100px;
+            max-width: 80px;
             height: auto;
-            margin-top: 20px;
+            margin: 10px auto;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .prefix {
+                margin-bottom: 5px;
+            }
         }
     </style>
 </head>
@@ -115,19 +137,27 @@
                     document.getElementById('result').style.fontSize = data.fontSize + 'px';
                     document.getElementById('featureImage').src = data.featureImage || '';
                     document.getElementById('featureImage').style.display = data.featureImage ? 'block' : 'none';
+                    document.getElementById('brandImage').src = brand.image || '';
+                    document.getElementById('brandImage').style.display = brand.image ? 'block' : 'none';
 
-                    const overrideImage = data.overrideLearnMoreImage || brand.image;
-                    document.getElementById('brandImage').src = overrideImage || '';
-                    document.getElementById('brandImage').style.display = overrideImage ? 'block' : 'none';
+                    // Update iframe height after content loads
+                    window.parent.postMessage({ height: document.body.scrollHeight }, '*');
                 } else {
                     document.getElementById('result').innerText = "Information not available for this brand.";
                     document.getElementById('brandImage').style.display = 'none';
+                    window.parent.postMessage({ height: document.body.scrollHeight }, '*');
                 }
             } else {
                 document.getElementById('result').innerText = "Please enter a brand name.";
                 document.getElementById('brandImage').style.display = 'none';
+                window.parent.postMessage({ height: document.body.scrollHeight }, '*');
             }
         }
+
+        // Send initial height to parent
+        window.addEventListener('load', () => {
+            window.parent.postMessage({ height: document.body.scrollHeight }, '*');
+        });
     </script>
 </body>
 </html>
